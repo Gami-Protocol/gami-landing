@@ -13,7 +13,7 @@ export function Hero() {
           <div className="square" />
           <PhoneMock />
           <div className="coin xp">XP<span>+186</span></div>
-          <div className="coin gami">GAMI<span>TOKEN</span></div>
+          <div className="coin gami"><img src="/gami-token.png" alt="GAMI token" width={112} height={112} /></div>
           <div className="coin usdc">USDC<span>ON BASE</span></div>
           <div className="coin card">CARD<span>•• 4417</span></div>
         </div>

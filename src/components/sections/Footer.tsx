@@ -1,11 +1,17 @@
 import { GamiMark } from '../ui/Icons';
 import { links } from '../../lib/links';
+import { mainHref, raiseHref } from '../../lib/site';
 
-const cols: Array<[string, Array<[string, string]>]> = [
-  ['Products', [['#wallet', 'Wallet'], ['#extension', 'Chrome extension'], ['#how', 'Card rewards'], ['#quests', 'Quests and games'], ['#ramp', 'XP economics']]],
-  ['Developers', [['#companies', 'MCP server'], ['#companies', 'Agentic web tool'], [links.docs, 'Documentation'], ['#companies', 'SDK']]],
-  ['Protocol', [['#settlement', 'Settlement'], ['#ramp', 'Token'], ['#', 'Privacy'], ['#', 'Terms']]],
+type Col = [string, Array<[string, string]>];
+
+const rawCols = (): Col[] => [
+  ['Products', [['/#wallet', 'Wallet'], ['/#extension', 'Chrome extension'], ['/#how', 'Card rewards'], ['/#quests', 'Quests and games'], ['/#ramp', 'XP economics']]],
+  ['Developers', [['/partners', 'List your project'], ['/#companies', 'MCP server'], ['/#companies', 'Agentic web tool'], [links.docs, 'Documentation']]],
+  ['Protocol', [['/#settlement', 'Settlement'], [raiseHref(), 'Token raise'], ['/#', 'Privacy'], ['/#', 'Terms']]],
 ];
+
+/** Paths belong to the main site, so from the raise subdomain they need its origin. */
+const cols = (): Col[] => rawCols().map(([title, items]): Col => [title, items.map(([href, label]): [string, string] => [href.startsWith('/') ? mainHref(href) : href, label])]);
 
 export function Footer() {
   return (
@@ -18,7 +24,7 @@ export function Footer() {
             </div>
             <p className="blurb">One SDK, one MCP server. XP, quests, missions and stablecoin-settled rewards for any app, game, card or store.</p>
           </div>
-          {cols.map(([title, items]) => (
+          {cols().map(([title, items]) => (
             <div key={title}>
               <h4>{title}</h4>
               <ul>{items.map(([href, label]) => <li key={label}><a href={href}>{label}</a></li>)}</ul>
