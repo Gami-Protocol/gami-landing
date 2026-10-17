@@ -1,0 +1,40 @@
+/* ARCADE Cyber-Brutalist tokens. Dark is the brand; light is the Foundation palette.
+   Source: Gami Design System artifact (project/tokens.json). Do not add radii or blur. */
+/* Layout: ARCADE Cyber-Brutalist. Split hero (device + headline), then a top-to-bottom explainer:
+   card payment → verified action → XP → wallet / extension → ramp chart (focal) → settlement → CTA.
+   Dark-first; light values are the Foundation palette. Square corners, hard offset shadows, hex motif. */
+:root{
+  --bg:#0e0e12; --bg-black:#000000; --bg-band:rgba(0,0,0,.4); --bg-hex-line:#1a1a22; --bg-white:#ffffff;
+  --fg:#ffffff; --fg-secondary:#d1d5db; --fg-muted:#9ca3af; --fg-subtle:#6b7280; --fg-faint:#4b5563;
+  --primary:#6e3cfb; --primary-deep:#4b24b8; --primary-mark:#702fe5; --accent:#9c6cff;
+  --secondary:#ff3d8b; --beam:#8ec5ff; --highlight:#ffeb55;
+  --on-primary:#ffffff; --on-primary-ink:#000000; --on-black:#ffffff;
+  --border:#000000; --border-strong:#ffffff; --border-hairline:rgba(255,255,255,.1); --border-accent:rgba(156,108,255,.3);
+  --success:#22c55e; --success-badge:#4ade80; --warning:#fbbf24; --danger:#ef4444; --glow:rgba(110,60,251,.4);
+  --shadow:8px 8px 0 0 #000000; --shadow-purple:8px 8px 0 0 #6e3cfb; --shadow-white:8px 8px 0 0 #ffffff; --shadow-sm:6px 6px 0 0 #000000;
+  --card:#0e0e12; --card-deep:#000000; --device:#000000;
+  --display:"Space Grotesk","Avenir Next","Segoe UI",sans-serif;
+  --sans:Inter,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#fbfafe; --bg-black:#14101f; --bg-band:#f4f2fb; --bg-hex-line:#e6e2f2; --bg-white:#ffffff;
+    --fg:#14101f; --fg-secondary:#2b2540; --fg-muted:#5c5670; --fg-subtle:#5c5670; --fg-faint:#7a7490;
+    --primary:#5b2fe0; --accent:#7b4ee4; --border:#14101f; --border-strong:#14101f; --border-hairline:rgba(20,16,31,.1); --border-accent:rgba(123,78,228,.3);
+    --success:#15803d; --success-badge:#15803d; --warning:#b45309; --danger:#b91c1c; --glow:rgba(91,47,224,.28);
+    --shadow:8px 8px 0 0 #14101f; --shadow-purple:8px 8px 0 0 #5b2fe0; --shadow-white:8px 8px 0 0 #fbfafe; --shadow-sm:6px 6px 0 0 #14101f;
+    --card:#ffffff; --card-deep:#14101f; --device:#14101f;
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#fbfafe; --bg-black:#14101f; --bg-band:#f4f2fb; --bg-hex-line:#e6e2f2; --bg-white:#ffffff;
+  --fg:#14101f; --fg-secondary:#2b2540; --fg-muted:#5c5670; --fg-subtle:#5c5670; --fg-faint:#7a7490;
+  --primary:#5b2fe0; --accent:#7b4ee4; --border:#14101f; --border-strong:#14101f; --border-hairline:rgba(20,16,31,.1); --border-accent:rgba(123,78,228,.3);
+  --success:#15803d; --success-badge:#15803d; --warning:#b45309; --danger:#b91c1c; --glow:rgba(91,47,224,.28);
+  --shadow:8px 8px 0 0 #14101f; --shadow-purple:8px 8px 0 0 #5b2fe0; --shadow-white:8px 8px 0 0 #fbfafe; --shadow-sm:6px 6px 0 0 #14101f;
+  --card:#ffffff; --card-deep:#14101f; --device:#14101f;
+  color-scheme:light;
+}

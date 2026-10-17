@@ -1,0 +1,21 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx vite build
+      - name: No card-network or issuer brand names in copy
+        run: |
+          if grep -riE "\b(visa|mastercard|amex|american express|marqeta|lithic|stripe issuing)\b" src; then
+            echo "Brand name found in source. Remove it: naming a network or issuer is a claim about a commercial relationship." && exit 1
+          fi
