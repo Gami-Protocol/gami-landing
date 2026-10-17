@@ -1,5 +1,6 @@
 import { Hexagon, Icon } from '../ui/Icons';
-import { SectionHead } from '../ui/Primitives';
+import { Button, SectionHead } from '../ui/Primitives';
+import { links } from '../../lib/links';
 import { SidePanelMock } from '../mocks/SidePanelMock';
 
 const features = [
@@ -18,6 +19,9 @@ export function Extension() {
           title="The wallet, on the site you are already on"
           intro="The extension reads the quest for the current site, tracks your card spend there and lets NOVA answer questions about your XP. Same Privy account, same Base wallet as the app."
         />
+        <div className="pgcta" style={{ marginTop: 32 }}>
+          <Button href={links.chromeStore}>Add to Chrome</Button>
+        </div>
         <div className="prod rev">
           <div className="feat">
             {features.map((f) => (
