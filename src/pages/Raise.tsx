@@ -1,6 +1,8 @@
 import { Suspense, lazy, useMemo, useState } from 'react';
 import { Button, Eyebrow, SectionHead } from '../components/ui/Primitives';
 import { links } from '../lib/links';
+import { launch, seed, shortAddr } from '../lib/tokenLaunch';
+import { RampOnboarding, SwapButton } from '../components/privy/RampOnboarding';
 import {
   CHAINS,
   RAISE,
@@ -14,14 +16,15 @@ import {
   type Chain,
 } from '../lib/raise';
 
-// Privy is large, so it loads only when someone reaches the reserve section.
+// Privy is large, so the provider and everything that uses it load only with this page.
+const PrivyRoot = lazy(() => import('../components/privy/PrivyRoot'));
 const FundWallet = lazy(() => import('../components/FundWallet'));
 
 const PRESETS = [100, 500, 1000, 5000];
 
 const steps = [
   ['01', 'Get the wallet', 'Create a Gami wallet or connect your own. Early buyers are tied to a wallet, not an email.'],
-  ['02', 'Hold USDC', 'Bring USDC on Base, Solana or Arc. Stablecoin only, so what you commit is what you see.'],
+  ['02', 'Hold USDC', 'Bring USDC on Base, Solana, Arc or Robinhood Chain. Stablecoin only, so what you commit is what you see.'],
   ['03', 'Reserve at a tier', 'Your spot is priced in the tier that is open when you commit. Earlier tiers carry a bigger bonus.'],
   ['04', 'Claim at launch', `Base tokens unlock at launch. Bonus tokens vest over ${RAISE.bonusVestDays} days, then trade in the pools below.`],
 ];
@@ -29,9 +32,14 @@ const steps = [
 export function Raise() {
   return (
     <main id="top">
-      <RaiseHero />
-      <Tiers />
-      <Reserve />
+      <Suspense fallback={<RaiseHero />}>
+        <PrivyRoot>
+          <RaiseHero />
+          <RampOnboarding />
+          <Tiers />
+          <Reserve />
+        </PrivyRoot>
+      </Suspense>
       <section className="sec">
         <div className="wrap">
           <SectionHead
@@ -66,12 +74,17 @@ function RaiseHero() {
             Meteora and Uniswap, so what you buy is what the pools start at.
           </p>
           <div className="pgcta">
-            <Button size="lg" href="#reserve">Reserve an allocation</Button>
-            <Button size="lg" variant="outline" href="#liquidity">See the pools</Button>
+            <Button size="lg" href="#ramp-onboarding">Start the ramp</Button>
+            {launch.live ? (
+              <Button size="lg" variant="outline" href={launch.swapUrl}>Swap on Uniswap</Button>
+            ) : (
+              <Button size="lg" variant="outline" href="#reserve">Reserve an allocation</Button>
+            )}
           </div>
         </div>
         <aside className="status" aria-label="Round status">
-          <div className="row"><span>Status</span><b className="pill">Opens soon</b></div>
+          <div className="row"><span>Status</span><b className="pill">{launch.live ? '● Live on Base' : 'Opens soon'}</b></div>
+          <div className="row"><span>Contract</span><b className="mono" style={{ textTransform: 'none' }}>{launch.live ? <a href={launch.explorerUrl} target="_blank" rel="noopener noreferrer">{shortAddr(launch.address)}</a> : 'Not yet published'}</b></div>
           <div className="row"><span>Sale price</span><b>{fmtUsd(RAISE.priceUsdc, 3)} / GAMI</b></div>
           <div className="row"><span>Open tier</span><b>{tier ? `${tier.label} · +${tier.bonusBps / 100}%` : 'Closed'}</b></div>
           <div className="bar" role="img" aria-label={`${filledPct.toFixed(0)} percent of the cap committed`}><i style={{ width: `${filledPct}%` }} /></div>
@@ -125,7 +138,7 @@ function Reserve() {
   const chainInfo = CHAINS.find((c) => c.id === chain)!;
 
   const mailto = `mailto:${links.contact}?subject=${encodeURIComponent('GAMI allocation request')}&body=${encodeURIComponent(
-    `Amount: ${amount} USDC\nChain: ${chainInfo.label}\nWallet: \n`,
+    `Amount: ${amount} USDC\nChain: ${chainInfo.label}${chainInfo.chainId ? ` (${chainInfo.chainId})` : ''}\nWallet: \n`,
   )}`;
   const href = error ? '#reserve' : links.raise || mailto;
 
@@ -150,6 +163,22 @@ function Reserve() {
               ))}
             </fieldset>
             <p className="note">{chainInfo.note}</p>
+            <dl className="facts chainfacts">
+              <div><dt>Network</dt><dd>{chainInfo.chainId ? `${chainInfo.label} · ${chainInfo.chainId}` : chainInfo.label}</dd></div>
+              <div>
+                <dt>USDC</dt>
+                <dd className={chainInfo.usdc ? 'mono' : ''}>
+                  {chainInfo.usdc ? (
+                    <a href={`${chainInfo.explorer}/${chainInfo.id === 'solana' ? 'token' : 'address'}/${chainInfo.usdc}`} target="_blank" rel="noopener noreferrer">
+                      {chainInfo.usdc.slice(0, 6)}…{chainInfo.usdc.slice(-4)}
+                    </a>
+                  ) : (
+                    'Not confirmed yet'
+                  )}
+                </dd>
+              </div>
+              <div><dt>Get USDC</dt><dd>{chainInfo.getUsdc}</dd></div>
+            </dl>
 
             <label className="fld" htmlFor="amt">Amount (USDC)</label>
             <input
@@ -273,32 +302,36 @@ function Liquidity() {
           </div>
         </div>
 
-        <div className="uni cd">
+        <div className="uni cd" id="uniswap">
           <div>
-            <Eyebrow>UNISWAP v3 · BASE</Eyebrow>
-            <h3>GAMI / USDC on the home chain</h3>
+            <Eyebrow>UNISWAP v3 · BASE · HOME CHAIN</Eyebrow>
+            <h3>GAMI / USDC, seeded and locked in one broadcast</h3>
             <p>
-              The same opening price, seeded as a v3 position. The position NFT goes into the liquidity locker for at least four years. Trading fees go to
-              the foundation and the principal cannot move.
+              The opening price is the ratio of the two seed amounts, exactly as the seed script computes it. The position NFT goes into the liquidity
+              locker for four years in the same transaction. Trading fees go to the foundation and the principal cannot move.
             </p>
+            <div className="swapbox"><SwapButton /></div>
           </div>
           <dl className="facts">
+            <div><dt>Seed</dt><dd>{fmtNum(seed.gamiWhole)} GAMI + {fmtUsd(seed.usdcUnits)} USDC</dd></div>
+            <div><dt>Opens at</dt><dd>{fmtUsd(seed.openPrice, 4)} / GAMI</dd></div>
+            <div><dt>FDV at open</dt><dd>{fmtUsd(seed.fdvUsd)} · {seed.supplyPct.toFixed(1)}% of supply in pool</dd></div>
+            <div><dt>Depth</dt><dd>{fmtUsd(seed.depthUsd)} both sides</dd></div>
             <div><dt>Chain</dt><dd>Base · 8453</dd></div>
             <div><dt>Position manager</dt><dd className="mono">0x03a5…34f1</dd></div>
-            <div><dt>Lock</dt><dd>4 years minimum</dd></div>
+            <div><dt>Lock</dt><dd>4 years</dd></div>
             <div>
               <dt>Token address</dt>
-              <dd className={links.tokenAddress ? 'mono' : ''}>
-                {links.tokenAddress ? (
-                  <a href={links.tokenExplorer} target="_blank" rel="noopener noreferrer">
-                    {links.tokenAddress.slice(0, 6)}…{links.tokenAddress.slice(-4)}
-                  </a>
-                ) : (
-                  'Published at launch'
-                )}
+              <dd className={launch.live ? 'mono' : ''}>
+                {launch.live ? <a href={launch.explorerUrl} target="_blank" rel="noopener noreferrer">{shortAddr(launch.address)}</a> : 'Published at launch'}
               </dd>
             </div>
           </dl>
+          {Math.abs(seed.openPrice - RAISE.priceUsdc) > 1e-9 ? (
+            <p className="err" role="note">
+              Pool opens at {fmtUsd(seed.openPrice, 4)} but the sale price is {fmtUsd(RAISE.priceUsdc, 4)}. Align SEED_GAMI_WHOLE / SEED_USDC_UNITS with the sale price before launch day.
+            </p>
+          ) : null}
         </div>
       </div>
     </section>
@@ -316,6 +349,8 @@ function FinePrint() {
             <li>Every number on this page is a placeholder in one config file. Final price, caps, tiers, bonus and vesting will be published before the round opens.</li>
             <li>Participation will exclude restricted regions and may require identity checks. Do not send funds to any address from this page.</li>
             <li>Pool figures show the planned seed, not live liquidity. Token prices can fall as well as rise.</li>
+            <li>Swapping happens on Uniswap, a third-party application. Gami does not operate the pool, custody funds or set the price you get. Always verify the GAMI contract address against Gami's official channels before swapping; name-squatted tokens are the normal failure mode on launch day.</li>
+            <li>Card and bank funding is provided by the ramp provider inside Privy, which applies its own identity checks, limits and fees. GAMI is a utility token for the Gami Protocol; nothing here is investment advice.</li>
           </ul>
         </div>
       </div>

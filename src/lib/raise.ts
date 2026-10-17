@@ -40,11 +40,63 @@ export const RAISE = {
   },
 };
 
-export type Chain = 'base' | 'solana' | 'arc';
-export const CHAINS: Array<{ id: Chain; label: string; note: string }> = [
-  { id: 'base', label: 'Base', note: 'Home chain. USDC on Base, Uniswap v3 pool.' },
-  { id: 'solana', label: 'Solana', note: 'LayerZero OFT. USDC on Solana, Meteora DLMM pool.' },
-  { id: 'arc', label: 'Arc', note: "Circle's stablecoin L1. Gas is paid in USDC." },
+export type Chain = 'base' | 'solana' | 'arc' | 'robinhood';
+
+export interface ChainInfo {
+  id: Chain;
+  label: string;
+  note: string;
+  /** EVM chain ID, or null for Solana. */
+  chainId: number | null;
+  /** USDC contract or mint on this chain, or null when USDC there isn't confirmed. */
+  usdc: string | null;
+  /** Block explorer base URL. */
+  explorer: string;
+  /** Where a buyer gets USDC on this chain. */
+  getUsdc: string;
+}
+
+/**
+ * Chains a buyer can pay from. Addresses are from each chain's issuer or docs. Robinhood Chain has no confirmed
+ * USDC contract yet, so its entry stays null and the page says so instead of showing one.
+ */
+export const CHAINS: ChainInfo[] = [
+  {
+    id: 'base',
+    label: 'Base',
+    note: 'Home chain. USDC on Base, Uniswap v3 pool.',
+    chainId: 8453,
+    usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+    explorer: 'https://basescan.org',
+    getUsdc: 'Buy USDC with a card in the box below, or send it from an exchange.',
+  },
+  {
+    id: 'solana',
+    label: 'Solana',
+    note: 'LayerZero OFT. USDC on Solana, Meteora DLMM pool.',
+    chainId: null,
+    usdc: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+    explorer: 'https://solscan.io',
+    getUsdc: 'Send USDC from an exchange or a Solana wallet.',
+  },
+  {
+    id: 'arc',
+    label: 'Arc',
+    note: "Circle's stablecoin L1. USDC is the gas token, so one balance pays for the buy and the fee.",
+    chainId: 5042,
+    usdc: '0x3600000000000000000000000000000000000000',
+    explorer: 'https://explorer.arc.io',
+    getUsdc: 'Bridge USDC in from another chain with Circle CCTP (Arc is CCTP domain 26).',
+  },
+  {
+    id: 'robinhood',
+    label: 'Robinhood Chain',
+    note: 'Arbitrum Orbit L2 from Robinhood, ETH for gas. USDC support on this chain is still being confirmed.',
+    chainId: 4663,
+    usdc: null,
+    explorer: 'https://robinhoodchain.blockscout.com',
+    getUsdc: 'Not available yet. Reserve here and we will email you where to send once USDC is confirmed.',
+  },
 ];
 
 export interface Quote {

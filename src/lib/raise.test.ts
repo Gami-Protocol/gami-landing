@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RAISE, amountError, currentTier, dlmmBins, dlmmBuy, quote } from './raise';
+import { CHAINS, RAISE, amountError, currentTier, dlmmBins, dlmmBuy, quote } from './raise';
 
 describe('quote', () => {
   it('applies the first-tier bonus inside one tier', () => {
@@ -90,5 +90,24 @@ describe('dlmmBuy', () => {
     const d = dlmmBuy(10_000_000);
     expect(d.unfilled).toBeGreaterThan(0);
     expect(d.gamiOut).toBeCloseTo(RAISE.pool.seedGami);
+  });
+});
+
+describe('CHAINS', () => {
+  it('has unique ids and EVM chain IDs', () => {
+    expect(new Set(CHAINS.map((c) => c.id)).size).toBe(CHAINS.length);
+    const ids = CHAINS.map((c) => c.chainId).filter((n) => n !== null);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+  it('lists Arc with its native USDC predeploy and Robinhood Chain without a made-up USDC', () => {
+    const arc = CHAINS.find((c) => c.id === 'arc')!;
+    expect(arc.chainId).toBe(5042);
+    expect(arc.usdc).toBe('0x3600000000000000000000000000000000000000');
+    const rh = CHAINS.find((c) => c.id === 'robinhood')!;
+    expect(rh.chainId).toBe(4663);
+    expect(rh.usdc).toBeNull();
+  });
+  it('uses well-formed EVM addresses', () => {
+    for (const c of CHAINS.filter((x) => x.chainId !== null && x.usdc)) expect(c.usdc).toMatch(/^0x[0-9a-fA-F]{40}$/);
   });
 });
