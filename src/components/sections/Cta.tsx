@@ -1,5 +1,6 @@
 import { Button, Eyebrow } from '../ui/Primitives';
 import { links } from '../../lib/links';
+import { raiseHref } from '../../lib/site';
 
 export function Cta() {
   return (
@@ -17,7 +18,9 @@ export function Cta() {
           </div>
           <small>
             Card provisioning rolls out with issuing partners. XP, quests and missions work today. Studios and companies:{' '}
-            <a href="#companies" style={{ textDecoration: 'underline' }}>plug in the MCP server</a>.
+            <a href="/partners" style={{ textDecoration: 'underline' }}>list your project</a> or read the{' '}
+            <a href={links.docs} style={{ textDecoration: 'underline' }}>docs</a>. Buying the token:{' '}
+            <a href={raiseHref()} style={{ textDecoration: 'underline' }}>see the raise</a>.
           </small>
         </div>
       </div>

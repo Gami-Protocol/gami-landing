@@ -9,8 +9,8 @@ export const RAISE_ORIGIN: string = (env.VITE_RAISE_SITE_URL || 'https://raise.g
 
 export const isRaiseHost = (hostname: string = window.location.hostname) => hostname.toLowerCase().startsWith('raise.');
 
-/** A main-site path as a link that works from either host. */
-export const mainHref = (path: string) => (isRaiseHost() ? MAIN_ORIGIN + path : path);
+/** A main-site path as a link that works from either host. Absolute URLs pass through untouched. */
+export const mainHref = (path: string) => (path.startsWith('/') && isRaiseHost() ? MAIN_ORIGIN + path : path);
 
 /** The raise page as a link that works from either host: the subdomain root when already there, else the subdomain. */
 export const raiseHref = () => (isRaiseHost() ? '/' : RAISE_ORIGIN);

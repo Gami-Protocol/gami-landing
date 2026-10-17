@@ -8,10 +8,10 @@ const mainItems = (): Array<[string, string]> => [
   ['/#wallet', 'Wallet'],
   ['/#extension', 'Extension'],
   ['/#quests', 'Quests'],
-  ['/#companies', 'For companies'],
   ['/#ramp', 'XP economics'],
+  ['/#companies', 'For companies'],
   [raiseHref(), 'Raise'],
-  ['/partners', 'Partners'],
+  [links.docs, 'Docs'],
 ];
 
 /** On the raise subdomain the nav is the raise page's own sections plus a way back to the main site. */
@@ -20,6 +20,7 @@ const raiseItems = (): Array<[string, string]> => [
   ['#reserve', 'Reserve'],
   ['#liquidity', 'Liquidity'],
   [mainHref('/partners'), 'Partners'],
+  [mainHref(links.docs), 'Docs'],
   [mainHref('/'), 'Main site'],
 ];
 
@@ -33,6 +34,13 @@ export function Nav() {
         <nav className="navlinks" aria-label="Sections">
           {items.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
         </nav>
+        {/* Narrow screens: the inline links are hidden, so the same links live in a menu. */}
+        <details className="menu">
+          <summary>Menu</summary>
+          <nav aria-label="Menu" onClick={(e) => { (e.currentTarget.closest('details') as HTMLDetailsElement).open = false; }}>
+            {items.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
+          </nav>
+        </details>
         <div className="navcta">
           <a className="quiet" href={links.chromeStore} {...(links.chromeStore.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>Add to Chrome</a>
           <Button size="sm" href={mainHref('/#cta')}>Get the wallet</Button>

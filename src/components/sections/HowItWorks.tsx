@@ -36,7 +36,7 @@ export function HowItWorks() {
               <div className="amt" style={{ marginTop: 12 }}>£2.00<small>Merchant reward budget · 2% rule</small></div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div className="amt" style={{ fontSize: 36, lineHeight: '36px' }}>200 XP<small>Minted to the payer</small></div>
+              <div className="amt" style={{ fontSize: 36, lineHeight: '36px' }}>100 XP<small>Minted to the payer · 1 XP per £1</small></div>
             </div>
           </div>
           <div className="splitbar" role="img" aria-label="70 percent to the payer as XP, 20 percent to the quest pool as GAMI, 10 percent to protocol fees in USDC">

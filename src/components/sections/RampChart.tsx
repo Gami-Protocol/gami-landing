@@ -75,7 +75,7 @@ export function RampChart() {
   );
 
   return (
-    <section className="sec" id="ramp">
+    <section className="sec band" id="ramp">
       <div className="wrap">
         <SectionHead
           eyebrow="XP ECONOMICS · THE RAMP"

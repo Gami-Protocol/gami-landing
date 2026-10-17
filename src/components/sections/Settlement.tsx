@@ -10,7 +10,7 @@ const rules = [
 
 export function Settlement() {
   return (
-    <section className="sec band" id="settlement">
+    <section className="sec" id="settlement">
       <div className="wrap">
         <Eyebrow>SETTLEMENT LAYER</Eyebrow>
         <h2 className="h2">Loyalty that settles onchain</h2>

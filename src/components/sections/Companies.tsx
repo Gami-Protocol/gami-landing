@@ -1,4 +1,5 @@
-import { Eyebrow, SectionHead } from '../ui/Primitives';
+import { Button, Eyebrow, SectionHead } from '../ui/Primitives';
+import { links } from '../../lib/links';
 
 const pipeline = [
   ['01', 'Event', 'A payment settles, a mission completes, a task matures.'],
@@ -17,6 +18,11 @@ export function Companies() {
           title="Plug in. Rewards run themselves."
           intro="Gami ships as an MCP server and a web agent. You describe the reward in plain language or one JSON rule. Three policy agents design, verify and settle it, and NOVA reports back without ever holding a key."
         />
+
+        <div className="pgcta" style={{ marginTop: 32 }}>
+          <Button href="/partners">List your project</Button>
+          <Button variant="outline" href={links.docs}>Read the docs</Button>
+        </div>
 
         <div className="co">
           <div className="term">

@@ -12,7 +12,7 @@ export const links = {
   appStore: env.VITE_APP_STORE_URL || '/#cta',
   playStore: env.VITE_PLAY_STORE_URL || '/#cta',
   chromeStore: env.VITE_CHROME_STORE_URL || '/#extension',
-  docs: env.VITE_DOCS_URL || '/#companies',
+  docs: env.VITE_DOCS_URL || '/docs',
   /** Live sale app. Empty until the round is cleared to open; the raise page then asks for an allocation by email. */
   raise: env.VITE_RAISE_URL || '',
   /** POST endpoint for partner submissions. Empty falls back to email. */

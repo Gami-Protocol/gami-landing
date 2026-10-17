@@ -13,6 +13,7 @@ import { Cta } from './components/sections/Cta';
 import { Footer } from './components/sections/Footer';
 import { Raise } from './pages/Raise';
 import { Partners } from './pages/Partners';
+import { Docs } from './pages/Docs';
 import { useLinkInterceptor, usePath } from './lib/router';
 import { isRaiseHost } from './lib/site';
 
@@ -24,9 +25,9 @@ function Home() {
       <Wallet />
       <Extension />
       <Quests />
-      <Companies />
       <RampChart />
       <Settlement />
+      <Companies />
       <Cta />
     </main>
   );
@@ -36,11 +37,13 @@ const pages: Record<string, { title: string; el: () => JSX.Element }> = {
   '/': { title: 'Gami Protocol', el: Home },
   '/raise': { title: 'Raise · Gami Protocol', el: Raise },
   '/partners': { title: 'Partners · Gami Protocol', el: Partners },
+  '/docs': { title: 'Docs · Gami Protocol', el: Docs },
 };
 
 /**
- * Home page order is the explainer: pay → wallet → extension → play and quest → plug in → the ramp → settlement → CTA.
- * Section bands alternate (plain / band) so each pair reads as a step down the page. /raise and /partners are separate pages.
+ * Home page order is the explainer: pay → wallet → extension → play and quest → the ramp → settlement → plug in → CTA.
+ * The consumer story runs first and the company story (MCP server, partners) follows it.
+ * Section bands alternate (plain / band) so each pair reads as a step down the page. /raise, /partners and /docs are separate pages.
  */
 export default function App() {
   useLinkInterceptor();
