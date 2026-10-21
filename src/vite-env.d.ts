@@ -2,6 +2,7 @@
 interface ImportMetaEnv {
   readonly VITE_APP_STORE_URL?: string;
   readonly VITE_PLAY_STORE_URL?: string;
+  readonly VITE_TESTFLIGHT_URL?: string;
   readonly VITE_CHROME_STORE_URL?: string;
   readonly VITE_DOCS_URL?: string;
   readonly VITE_RAISE_URL?: string;

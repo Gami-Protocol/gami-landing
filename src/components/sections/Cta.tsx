@@ -14,6 +14,7 @@ export function Cta() {
         <div>
           <div className="btns">
             <Button variant="ink" size="lg" href={links.appStore}>Get the wallet</Button>
+            <Button variant="outline" size="lg" href={links.testFlight} style={{ borderColor: '#000', color: '#000' }}>Test on iOS</Button>
             <Button variant="outline" size="lg" href={links.chromeStore} style={{ borderColor: '#000', color: '#000' }}>Add to Chrome</Button>
           </div>
           <small>

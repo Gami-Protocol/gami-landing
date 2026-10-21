@@ -11,6 +11,8 @@ export const links = {
   tokenExplorer: tokenAddress ? `https://basescan.org/token/${tokenAddress}` : '',
   appStore: env.VITE_APP_STORE_URL || '/#cta',
   playStore: env.VITE_PLAY_STORE_URL || '/#cta',
+  /** iOS TestFlight beta for trying the wallet before the App Store release. Override with VITE_TESTFLIGHT_URL. */
+  testFlight: env.VITE_TESTFLIGHT_URL || 'https://testflight.apple.com/join/C8yYkmFr',
   /** Chrome Web Store listing. Override with VITE_CHROME_STORE_URL. */
   chromeStore: env.VITE_CHROME_STORE_URL || 'https://chromewebstore.google.com/detail/gami/jncjhnnikcigmhmlikpfbjnnflfbadbo',
   docs: env.VITE_DOCS_URL || '/docs',

@@ -1,5 +1,6 @@
 import { Hexagon, Icon } from '../ui/Icons';
-import { SectionHead } from '../ui/Primitives';
+import { Button, SectionHead } from '../ui/Primitives';
+import { links } from '../../lib/links';
 import { WalletLedgerMock } from '../mocks/PhoneMock';
 
 const features = [
@@ -18,6 +19,9 @@ export function Wallet() {
           title="One wallet for XP, GAMI and USDC"
           intro="Sign in with an email code or passkey. An embedded wallet on Base is created for you on first sign-in. You never see a seed phrase."
         />
+        <div className="pgcta" style={{ marginTop: 32 }}>
+          <Button href={links.testFlight}>Test the wallet on TestFlight</Button>
+        </div>
         <div className="prod">
           <div className="feat">
             {features.map((f) => (
